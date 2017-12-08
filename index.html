@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    #obj {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      background: hsl(0, 0%, 0%);
+    }
+  </style>
+</head>
+<body>
+  <script>
+
+    var ww = window.outerWidth
+    var wh = window.outerHeight
+
+    console.log(ww, wh)
+
+    $obj = document.getElementById('obj')
+    var ox = $obj.offset
+    function  MovePoint() {
+      this.x = 0
+      this.y = 0
+      this.elem = this.buildElem()
+      this.bindEvent()
+    }
+    MovePoint.prototype.buildElem = function() {
+      var $obj = document.createElement('div')
+      $obj.setAttribute('id', 'obj')
+
+      return $obj
+    }
+    MovePoint.prototype.bindEvent = function() {
+      var that = this
+      window.onclick = function(e) {
+        that.refresh(e.pageX, e.pageY)
+      }
+    }
+    MovePoint.prototype.refresh = function(mx, my) {
+      if (mx > ww/2) {
+        this.x += 10
+      } else {
+        this.x -= 10
+      }
+
+      if (my > wh/2) {
+        this.y += 10
+      } else {
+        this.y -= 10
+      }
+      this.moving(this.x, this.y)
+    }
+    MovePoint.prototype.moving = function(newx, newy) {
+      var translate = 'transform: translate(' + newx + 'px,' + newy + 'px)'
+      document.getElementById('obj').setAttribute('style', translate)
+    }
+
+    window.onclick = function(e) {
+
+    }
+
+    function App() {
+      this.start()
+    }
+    App.prototype.start = function() {
+      var item = new  MovePoint()
+      document.body.append(item.elem)
+    }
+
+    window.app = new App()
+
+  </script>
+</body>
+</html>

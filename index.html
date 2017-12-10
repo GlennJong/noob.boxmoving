@@ -4,10 +4,19 @@
   <meta charset="UTF-8">
   <title>Document</title>
   <style>
-    #obj {
+    body {
+      display: flex;
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      margin: 0;
+      padding: 0;
+    }
+    #obj {
+      position: relative;
+      margin: auto;
       width: 10px;
       height: 10px;
       background: hsl(0, 0%, 0%);
@@ -17,54 +26,58 @@
 <body>
   <script>
 
-    var ww = window.outerWidth
-    var wh = window.outerHeight
+    var ww = window.innerWidth
+    var wh = window.innerHeight
 
     console.log(ww, wh)
 
-    $obj = document.getElementById('obj')
-    var ox = $obj.offset
     function  MovePoint() {
       this.x = 0
       this.y = 0
       this.elem = this.buildElem()
+
       this.bindEvent()
     }
     MovePoint.prototype.buildElem = function() {
       var $obj = document.createElement('div')
       $obj.setAttribute('id', 'obj')
-
       return $obj
     }
     MovePoint.prototype.bindEvent = function() {
       var that = this
-      window.onclick = function(e) {
+      window.onmousemove = function(e) {
         that.refresh(e.pageX, e.pageY)
       }
+      // window.onmousemove = function(e) {
+        // requestAnimationFrame(that.refresh(e.pageX, e.pageY))
+        // console.log('work')
+      // }
     }
     MovePoint.prototype.refresh = function(mx, my) {
-      if (mx > ww/2) {
+      // if (mx > ww/2) {
+      if (mx > this.elem.offsetLeft) {
         this.x += 10
       } else {
         this.x -= 10
       }
 
-      if (my > wh/2) {
+      if (my > this.elem.offsetTop) {
         this.y += 10
       } else {
         this.y -= 10
       }
       this.moving(this.x, this.y)
+
+      // window.requestAnimationFrame(this.refresh)
+
     }
     MovePoint.prototype.moving = function(newx, newy) {
-      var translate = 'transform: translate(' + newx + 'px,' + newy + 'px)'
-      document.getElementById('obj').setAttribute('style', translate)
+      // var translate = 'transform: translate(' + newx + 'px,' + newy + 'px)'
+      var translate = 'left:' + newx + 'px; top:' + newy + 'px;'
+      this.elem.setAttribute('style', translate)
+
+
     }
-
-    window.onclick = function(e) {
-
-    }
-
     function App() {
       this.start()
     }
